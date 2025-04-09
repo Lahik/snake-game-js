@@ -10,6 +10,8 @@ let snakeY = UNIT_SIZE * 5;
 let foodX;
 let foodY;
 
+let snakeBody = [];
+
 let velocityX = 0;
 let velocityY = 0;
 
@@ -23,22 +25,39 @@ window.onload = () => {
 
     document.addEventListener("keydown", changeDirection);
 
-    setInterval(update, 1000);
+    setInterval(update, 100);
 }
 
 function update() {
+    //! draw board
     context.fillStyle = "black";
     context.fillRect(0, 0, board.width, board.height);
     
-    if(snakeX === foodX && snakeY === foodY) placeFood();
-
+    checkEatFood();
+    
+    //! draw Food
     context.fillStyle = "red";
     context.fillRect(foodX, foodY, UNIT_SIZE, UNIT_SIZE);
+
+    //! move snake
+    for(let i = snakeBody.length - 1; i > 0; i--) {
+        snakeBody[i] = snakeBody[i-1];
+    }
+    if(snakeBody.length) {
+        snakeBody[0] = [snakeX, snakeY];
+    }
     
+    //! shift the head of the snake
     context.fillStyle = "lime";
     snakeX += (velocityX * UNIT_SIZE);
     snakeY += (velocityY * UNIT_SIZE);
+    
+    //! draw snake body
     context.fillRect(snakeX, snakeY, UNIT_SIZE, UNIT_SIZE);
+    context.fillStyle = "#7CFC00";
+    for(let i = 0; i < snakeBody.length; i++) {
+        context.fillRect(snakeBody[i][0], snakeBody[i][1], UNIT_SIZE, UNIT_SIZE);
+    }
 }
 
 function changeDirection(e) {
@@ -69,4 +88,11 @@ function changeDirection(e) {
 function placeFood() {
     foodX = Math.floor(Math.random() * ROWS) * UNIT_SIZE;
     foodY = Math.floor(Math.random() * COLS) * UNIT_SIZE;
+}
+
+function checkEatFood() {
+    if(snakeX === foodX && snakeY === foodY) {
+        snakeBody.push([foodX, foodY]);
+        placeFood();
+    }   
 }
