@@ -16,6 +16,7 @@ let velocityX = 0;
 let velocityY = 0;
 
 let gameOver = false;
+let score = 0;
 
 window.onload = () => {
     board = document.getElementById("board");
@@ -63,6 +64,13 @@ function update() {
         context.fillRect(snakeBody[i][0], snakeBody[i][1], UNIT_SIZE, UNIT_SIZE);
     }
 
+    context.fillStyle = "white";
+    context.font = "20px Courier New";
+    context.fillText("Score: ", 10, 20);
+    context.fillStyle = "red";
+    context.font = "bold 20px Courier New";
+    context.fillText(score, 85, 22);
+
     checkGameOver();
 }
 
@@ -100,6 +108,7 @@ function checkEatFood() {
     if(snakeX === foodX && snakeY === foodY) {
         snakeBody.push([foodX, foodY]);
         placeFood();
+        score++;
     }   
 }
 
@@ -113,10 +122,14 @@ function checkGameOver() {
             gameOver = true;
         }
     }
-    
+
     if(gameOver) {
         context.fillStyle = "red";
         context.font = "50px Courier New"; 
         context.fillText("Game Over", board.width / 4, board.height / 2);
+        
+        context.font = "30px Courier New"; 
+        context.fillStyle = "white";
+        context.fillText("Score: " + score, board.width / 3, board.height / 2 + 50);
     }
 }
