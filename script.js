@@ -75,27 +75,43 @@ function update() {
 }
 
 function changeDirection(e) {
+    let keyPressed = false;
+
     switch(e.code) {
         case 'ArrowUp':
             if (velocityY === 1) return; // Prevent snake from going back on itself
             velocityX = 0;
             velocityY = -1;       
+            keyPressed = true;
             break;
         case 'ArrowDown':
             if (velocityY === -1) return;
             velocityX = 0;
             velocityY = 1;       
+            keyPressed = true;
             break;
         case 'ArrowLeft':
             if (velocityX === 1) return;
             velocityX = -1;
             velocityY = 0;       
+            keyPressed = true;
             break;
         case 'ArrowRight':
             if (velocityX === -1) return;
             velocityX = 1;
             velocityY = 0;       
+            keyPressed = true;
             break;
+    }
+    if(gameOver && keyPressed) {
+        gameOver = false;
+        score = 0;
+        snakeX = UNIT_SIZE * 5;
+        snakeY = UNIT_SIZE * 5;
+        snakeBody = [];
+        velocityX = 0;
+        velocityY = 0;
+        placeFood();
     }
 }
 
