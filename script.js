@@ -15,6 +15,8 @@ let snakeBody = [];
 let velocityX = 0;
 let velocityY = 0;
 
+let gameOver = false;
+
 window.onload = () => {
     board = document.getElementById("board");
     board.height = COLS * UNIT_SIZE;
@@ -29,6 +31,8 @@ window.onload = () => {
 }
 
 function update() {
+    if(gameOver) return;
+    
     //! draw board
     context.fillStyle = "black";
     context.fillRect(0, 0, board.width, board.height);
@@ -58,6 +62,8 @@ function update() {
     for(let i = 0; i < snakeBody.length; i++) {
         context.fillRect(snakeBody[i][0], snakeBody[i][1], UNIT_SIZE, UNIT_SIZE);
     }
+
+    checkGameOver();
 }
 
 function changeDirection(e) {
@@ -95,4 +101,22 @@ function checkEatFood() {
         snakeBody.push([foodX, foodY]);
         placeFood();
     }   
+}
+
+function checkGameOver() {
+    if(snakeX < 0 || snakeX >= board.width || snakeY < 0 || snakeY >= board.height) {
+        gameOver = true;
+    }
+
+    for(let i = 0; i < snakeBody.length; i++) {
+        if(snakeX === snakeBody[i][0] && snakeY === snakeBody[i][1]) {
+            gameOver = true;
+        }
+    }
+    
+    if(gameOver) {
+        context.fillStyle = "red";
+        context.font = "50px Courier New"; 
+        context.fillText("Game Over", board.width / 4, board.height / 2);
+    }
 }
